@@ -71,14 +71,15 @@ export async function GET() {
     const data = await response.json();
     
     // Transform the data to match dashboard expectations
-    const status = data.status || {
-      state: "offline",
-      lastActive: new Date().toISOString(),
-      currentTask: "No active task",
-      mode: "idle",
-      uptime: "0m",
-      sessions: 0,
-      tokens: 0,
+    const rawStatus = data.status || {};
+    const status = {
+      online: rawStatus.state === "online" || rawStatus.online === true,
+      lastActive: rawStatus.lastActive || new Date().toISOString(),
+      currentTask: rawStatus.currentTask || "No active task",
+      mode: rawStatus.mode || "idle",
+      uptime: rawStatus.uptime || "0m",
+      sessionsToday: rawStatus.sessions || rawStatus.sessionsToday || 0,
+      tokensUsed: rawStatus.tokens || rawStatus.tokensUsed || 0,
     };
     
     const workQueue = parseWorkQueue(data.queue || "");
