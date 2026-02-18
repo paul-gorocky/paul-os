@@ -1,12 +1,13 @@
 {
   "state": "online",
-  "lastActive": "2026-02-18T15:38:00Z",
+  "lastActive": "2026-02-18T15:42:00Z",
   "currentTask": "Autonomous operations active",
   "activeSubAgents": [],
   "mode": "autonomous",
-  "uptime": "4h 23m",
-  "sessions": 12,
-  "tokens": 127532,
+  "uptime": "4h 27m",
+  "sessions": 13,
+  "tokens": 101602,
   "todayScore": 42.5,
-  "streakDays": 1
+  "streakDays": 1,
+  "model": "anthropic/claude-sonnet-4-5"
 }
