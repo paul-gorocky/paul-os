@@ -1,0 +1,8 @@
+{
+  "state": "working",
+  "lastActive": "2026-02-18T15:16:00Z",
+  "currentTask": "Building PAUL-OS dashboard",
+  "activeSubAgents": ["paul-os-builder"],
+  "todayScore": null,
+  "streakDays": 0
+}
