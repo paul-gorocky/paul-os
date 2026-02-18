@@ -1,8 +1,12 @@
 {
-  "state": "working",
-  "lastActive": "2026-02-18T15:16:00Z",
-  "currentTask": "Building PAUL-OS dashboard",
-  "activeSubAgents": ["paul-os-builder"],
-  "todayScore": null,
-  "streakDays": 0
+  "state": "online",
+  "lastActive": "2026-02-18T15:38:00Z",
+  "currentTask": "Autonomous operations active",
+  "activeSubAgents": [],
+  "mode": "autonomous",
+  "uptime": "4h 23m",
+  "sessions": 12,
+  "tokens": 127532,
+  "todayScore": 42.5,
+  "streakDays": 1
 }
