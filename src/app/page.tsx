@@ -30,13 +30,41 @@ export default function Dashboard() {
   const [activeView, setActiveView] = useState<"wide" | "deep">("wide");
 
   useEffect(() => {
+    const EC2_API = "https://tradition-practical-union-preferred.trycloudflare.com/api/all";
+
     const fetchData = async () => {
-      const res = await fetch("/api/dashboard");
-      const json = await res.json();
-      setData(json);
+      try {
+        // Try live EC2 API directly from browser
+        const res = await fetch(EC2_API, { cache: "no-store" });
+        if (!res.ok) throw new Error("API error");
+        const raw = await res.json();
+
+        // Map EC2 fields to dashboard format
+        const mapped: DashboardData = {
+          status: {
+            online: raw.status?.state === "online",
+            lastActive: raw.status?.lastActive || new Date().toISOString(),
+            currentTask: raw.status?.currentTask || "No active task",
+            mode: raw.status?.mode || "idle",
+            uptime: raw.status?.uptime || "0m",
+            sessionsToday: raw.status?.sessions || 0,
+            tokensUsed: raw.status?.tokens || 0,
+          },
+          workQueue: { high: [], medium: [], low: [] },
+          workActive: { title: "Loading...", started: "", status: "", subtasks: [], notes: "" },
+          trace: raw.trace || [],
+          scores: raw.scores || [],
+        };
+        setData(mapped);
+      } catch {
+        // Fall back to Vercel API if EC2 unreachable
+        const res = await fetch("/api/dashboard");
+        const json = await res.json();
+        setData(json);
+      }
     };
     fetchData();
-    const interval = setInterval(fetchData, 10000);
+    const interval = setInterval(fetchData, 15000);
     return () => clearInterval(interval);
   }, []);
 
