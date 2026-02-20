@@ -31,17 +31,24 @@ export async function GET() {
     const lines = content.trim().split("\n").filter((l) => l.trim());
     
     // Get last 10 trace items
-    const recentTraces = lines.slice(-10).map((line) => JSON.parse(line));
+    const recentTraces = lines.slice(-10).map((line) => {
+      try { return JSON.parse(line); } catch { return null; }
+    }).filter(Boolean);
     
-    for (const trace of recentTraces) {
+    for (const trace of recentTraces as any[]) {
       let type = "observation";
-      if (trace.type === "insight") type = "learning";
+      if (trace.backtracked) type = "learning";
+      else if (trace.type === "insight") type = "learning";
       else if (trace.type === "decision") type = "decision";
-      else if (trace.type === "backtrack") type = "learning";
+      else if (trace.action) type = "action";
+      
+      const contentParts = [trace.action || trace.hypothesis || trace.step].filter(Boolean);
+      if (trace.outcome) contentParts.push(`→ ${trace.outcome}`);
+      const content = contentParts.join(" ");
       
       memories.push({
-        timestamp: trace.timestamp,
-        content: trace.step,
+        timestamp: trace.timestamp || new Date().toISOString(),
+        content: content || "(no details)",
         type,
       });
     }
